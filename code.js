@@ -1,48 +1,18 @@
-
 // Store the user's answer
 let userAnswer = "";
 
 // Store the score
 let score = 0;
 
-// Store all questions
-let questions = [
-
-    {
-        question: "What is 2 + 2?",
-        option1: "3",
-        option2: "4",
-        option3: "5",
-        option4: "6",
-        answer: "4"
-    },
-
-    {
-        question: "Capital of India?",
-        option1: "Delhi",
-        option2: "Tokyo",
-        option3: "Paris",
-        option4: "London",
-        answer: "Delhi"
-    },
-
-    {
-        question: "How many days are in a week?",
-        option1: "5",
-        option2: "6",
-        option3: "7",
-        option4: "8",
-        answer: "7"
-    }
-
-];
-
+// Store questions from the API
+let questions = [];
 
 // Keep track of the current question
 let currentQuestionIndex = 0;
 
 
 // Get the HTML elements
+
 let quiz = document.getElementById("quiz");
 
 let question = document.getElementById("question");
@@ -59,55 +29,141 @@ let scoreScreen = document.getElementById("score");
 let finalScore = document.getElementById("finalScore");
 
 
-// Show the current question
+// --------------------------------
+// GET QUESTIONS FROM API
+// --------------------------------
+
+function getQuestions() {
+
+    fetch("https://opentdb.com/api.php?amount=5&type=multiple")
+
+        .then(function(response) {
+
+            return response.json();
+
+        })
+
+        .then(function(data) {
+
+            console.log(data);
+
+
+            // Check if the API returned questions
+
+            if (data.response_code !== 0) {
+
+                question.textContent =
+                    "The API did not return questions.";
+
+                return;
+
+            }
+
+
+            // Store the questions
+
+            questions = data.results;
+
+
+            // Show the first question
+
+            loadQuestion();
+
+        })
+
+        .catch(function(error) {
+
+            console.log(error);
+
+            question.textContent =
+                "Could not load questions.";
+
+        });
+
+}
+
+
+// --------------------------------
+// CLEAN API TEXT
+// --------------------------------
+
+function cleanText(text) {
+
+    let element = document.createElement("textarea");
+
+    element.innerHTML = text;
+
+    return element.value;
+
+}
+
+
+// --------------------------------
+// SHOW CURRENT QUESTION
+// --------------------------------
+
 function loadQuestion() {
 
+    let currentQuestion =
+        questions[currentQuestionIndex];
+
+
+    // Show question
+
     question.textContent =
-        questions[currentQuestionIndex].question;
+        cleanText(currentQuestion.question);
+
+
+    // Show answers
 
     option1.textContent =
-        questions[currentQuestionIndex].option1;
-
-    option1.dataset.value =
-        questions[currentQuestionIndex].option1;
-
+        cleanText(currentQuestion.incorrect_answers[0]);
 
     option2.textContent =
-        questions[currentQuestionIndex].option2;
-
-    option2.dataset.value =
-        questions[currentQuestionIndex].option2;
-
+        cleanText(currentQuestion.incorrect_answers[1]);
 
     option3.textContent =
-        questions[currentQuestionIndex].option3;
-
-    option3.dataset.value =
-        questions[currentQuestionIndex].option3;
-
+        cleanText(currentQuestion.incorrect_answers[2]);
 
     option4.textContent =
-        questions[currentQuestionIndex].option4;
+        cleanText(currentQuestion.correct_answer);
+
+
+    // Store answers inside buttons
+
+    option1.dataset.value =
+        cleanText(currentQuestion.incorrect_answers[0]);
+
+    option2.dataset.value =
+        cleanText(currentQuestion.incorrect_answers[1]);
+
+    option3.dataset.value =
+        cleanText(currentQuestion.incorrect_answers[2]);
 
     option4.dataset.value =
-        questions[currentQuestionIndex].option4;
+        cleanText(currentQuestion.correct_answer);
 
+
+    // Clear previous result
 
     result.textContent = "";
 
     userAnswer = "";
+
 }
 
 
-// Load the first question
-loadQuestion();
+// --------------------------------
+// GET ALL BUTTONS
+// --------------------------------
 
-
-// Get all buttons
 let buttons = document.querySelectorAll("button");
 
 
-// Check every button
+// --------------------------------
+// BUTTON CLICK
+// --------------------------------
+
 buttons.forEach(function(button) {
 
     button.onclick = function() {
@@ -118,7 +174,7 @@ buttons.forEach(function(button) {
 
 
         // -------------------------
-        // ANSWER BUTTON
+        // ANSWER
         // -------------------------
 
         if (action === "answer") {
@@ -132,7 +188,7 @@ buttons.forEach(function(button) {
 
 
         // -------------------------
-        // SUBMIT BUTTON
+        // SUBMIT
         // -------------------------
 
         else if (action === "submit") {
@@ -146,10 +202,13 @@ buttons.forEach(function(button) {
 
             else if (
                 userAnswer ===
-                questions[currentQuestionIndex].answer
+                cleanText(
+                    questions[currentQuestionIndex].correct_answer
+                )
             ) {
 
-                result.textContent = "Correct!";
+                result.textContent =
+                    "Correct!";
 
                 score++;
 
@@ -157,7 +216,8 @@ buttons.forEach(function(button) {
 
             else {
 
-                result.textContent = "Incorrect!";
+                result.textContent =
+                    "Incorrect!";
 
             }
 
@@ -165,7 +225,7 @@ buttons.forEach(function(button) {
 
 
         // -------------------------
-        // NEXT BUTTON
+        // NEXT QUESTION
         // -------------------------
 
         else if (action === "next") {
@@ -183,13 +243,18 @@ buttons.forEach(function(button) {
 
             else {
 
-                // Hide the quiz
+                // Hide quiz
+
                 quiz.style.display = "none";
 
-                // Show the score screen
+
+                // Show score screen
+
                 scoreScreen.style.display = "block";
 
-                // Display the final score
+
+                // Show final score
+
                 finalScore.textContent =
                     "Your Score: " +
                     score +
@@ -203,3 +268,11 @@ buttons.forEach(function(button) {
     };
 
 });
+
+
+// --------------------------------
+// START QUIZ
+// --------------------------------
+
+getQuestions();
+
