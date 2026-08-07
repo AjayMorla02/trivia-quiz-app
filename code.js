@@ -83,10 +83,6 @@ function getQuestions() {
 }
 
 
-// --------------------------------
-// CLEAN API TEXT
-// --------------------------------
-
 function cleanText(text) {
 
     let element = document.createElement("textarea");
@@ -98,9 +94,6 @@ function cleanText(text) {
 }
 
 
-// --------------------------------
-// SHOW CURRENT QUESTION
-// --------------------------------
 
 function loadQuestion() {
 
@@ -153,16 +146,9 @@ function loadQuestion() {
 }
 
 
-// --------------------------------
-// GET ALL BUTTONS
-// --------------------------------
 
 let buttons = document.querySelectorAll("button");
 
-
-// --------------------------------
-// BUTTON CLICK
-// --------------------------------
 
 buttons.forEach(function(button) {
 
@@ -173,10 +159,6 @@ buttons.forEach(function(button) {
         let value = button.dataset.value;
 
 
-        // -------------------------
-        // ANSWER
-        // -------------------------
-
         if (action === "answer") {
 
             userAnswer = value;
@@ -186,10 +168,6 @@ buttons.forEach(function(button) {
 
         }
 
-
-        // -------------------------
-        // SUBMIT
-        // -------------------------
 
         else if (action === "submit") {
 
@@ -224,9 +202,6 @@ buttons.forEach(function(button) {
         }
 
 
-        // -------------------------
-        // NEXT QUESTION
-        // -------------------------
 
         else if (action === "next") {
 
@@ -270,9 +245,7 @@ buttons.forEach(function(button) {
 });
 
 
-// --------------------------------
-// START QUIZ
-// --------------------------------
-
-getQuestions();
+document.addEventListener("DOMContentLoaded", function() {
+    getQuestions();
+});
 
