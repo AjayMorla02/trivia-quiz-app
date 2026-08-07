@@ -1,0 +1,64 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz App</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+<body>
+
+    <div class="quiz" id="quiz">
+
+        <h1>Test Your Knowledge</h1>
+
+        <h2 id="question"></h2>
+
+        <button id="option1" data-action="answer"></button>
+
+        <button id="option2" data-action="answer"></button>
+
+        <button id="option3" data-action="answer"></button>
+
+        <button id="option4" data-action="answer"></button>
+
+        <br>
+
+        <button class="submit-btn" data-action="submit">
+            Submit
+        </button>
+
+        <button class="next-btn" data-action="next">
+            Next Question
+        </button>
+
+        <h2 id="result"></h2>
+
+    </div>
+
+
+    <!-- This is hidden until the quiz is finished -->
+
+    <div class="score" id="score">
+
+        <h1>Quiz Finished!</h1>
+
+        <h2 id="finalScore"></h2>
+
+    </div>
+
+
+    <script src="code.js"></script>
+
+</body>
+
+</html>
+
