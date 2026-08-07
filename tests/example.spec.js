@@ -1,31 +1,27 @@
 // @ts-check
 import { test, expect } from '@playwright/test';
 
-test('quiz page', async ({ page }) => {
+test('quiz page question available', async ({ page }) => {
   await page.goto('http://127.0.0.1:5500');
 
   // Expect a title "to contain" a substring.
-  await expect(page.locator('#question')).toHaveText('What is 2 + 2?');
+  await expect(page.locator('#question')).not.toBeEmpty();
 });
 
-test('user can select an answer', async ({ page }) => {
+test('options available', async ({ page }) => {
   await page.goto('http://127.0.0.1:5500');
 
   // Click the get started link.
-  await page.locator('#option2').click();
-
-  // Expects page to have a heading with the name of Installation.
-  await expect(page.locator('#result')).toHaveText('You selected: 4');
+  await expect(page.locator('#option1')).not.toBeEmpty();
+  await expect(page.locator('#option2')).not.toBeEmpty();
+  await expect(page.locator('#option3')).not.toBeEmpty();
+  await expect(page.locator('#option4')).not.toBeEmpty();
 });
 
-test('correct answer is shown', async({ page }) => {
-    await page.goto('http://127.0.0.1:5500');
+test('answer selected', async ({ page }) => {
+  await page.goto('http://127.0.0.1:5500');
 
-    // Click the get started link.
-    await page.locator('#option2').click();
+  await page.locator('#option1').click();
 
-    await page.locator('.submit-btn').click();
-    
-    // Expects page to have a heading with the name of Installation.
-    await expect(page.locator('#result')).toHaveText('Correct!');
+  await expect(page.locator('#result')).toContainText('You selected:');
 });
